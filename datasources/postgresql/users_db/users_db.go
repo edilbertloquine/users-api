@@ -5,9 +5,8 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strconv"
 
-	_ "github.com/lib/pq"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 const (
@@ -15,7 +14,7 @@ const (
 	postgresql_user_password = "password"
 	postgresql_user_host     = "host"
 	postgresql_user_port     = "port"
-	postgresql_user_schema   = "schema"
+	postgresql_user_database = "database"
 )
 
 var (
@@ -25,28 +24,21 @@ var (
 	password = os.Getenv(postgresql_user_password)
 	host     = os.Getenv(postgresql_user_host)
 	port     = os.Getenv(postgresql_user_port)
-	schema   = os.Getenv(postgresql_user_schema)
+	database = os.Getenv(postgresql_user_database)
 )
 
 func init() {
 	var err error
-	var portnum int64
 
-	portnum, err = strconv.ParseInt(port, 10, 64)
-	if err != nil {
-		panic(err)
-	}
-
-	dataSourceName := fmt.Sprintf("host=%s port=%d user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		host,
-		portnum,
+	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8",
 		username,
 		password,
-		schema,
+		host,
+		port,
+		database,
 	)
 
-	Client, err = sql.Open("postgres", dataSourceName)
+	Client, err = sql.Open("mysql", dataSourceName)
 	if err != nil {
 		panic(err)
 	}
