@@ -1,8 +1,6 @@
 package services
 
 import (
-	"fmt"
-
 	"github.com/edilbertloquine/go-microservices/users-api/domain/users"
 	"github.com/edilbertloquine/go-microservices/users-api/utils/errors"
 )
@@ -18,7 +16,6 @@ func GetUser(userId int64) (*users.User, *errors.RestErr) {
 
 func CreateUser(user users.User) (*users.User, *errors.RestErr) {
 	if err := user.Validate(); err != nil {
-		fmt.Println("from service ", err)
 		return nil, err
 	}
 
@@ -29,6 +26,23 @@ func CreateUser(user users.User) (*users.User, *errors.RestErr) {
 	return &user, nil
 }
 
-func FindUser() {
+func UpdateUser(user users.User) (*users.User, *errors.RestErr) {
+	current, err := GetUser(user.Id)
+	if err != nil {
+		return nil, err
+	}
 
+	if err := user.Validate(); err != nil {
+		return nil, err
+	}
+
+	current.FirstName = user.FirstName
+	current.LastName = user.LastName
+	current.Email = user.Email
+
+	if err := current.Update(); err != nil {
+		return nil, err
+	}
+
+	return current, nil
 }
