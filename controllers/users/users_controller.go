@@ -38,7 +38,7 @@ func GetUser(c *gin.Context) {
 	}
 
 	user, errr := services.GetUser(userId)
-	if err != nil {
+	if errr != nil {
 		c.JSON(errr.Status, errr)
 		return
 	}
