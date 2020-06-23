@@ -1,1 +1,1 @@
-# users-api
+# Some GoLang studies w/ go mysql client
