@@ -1,1 +1,1 @@
-### golang microservice study w/ go mysql client
+### golang microservice w/ go mysql client
